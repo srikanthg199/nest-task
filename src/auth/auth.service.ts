@@ -43,6 +43,10 @@ export class AuthService {
     return { access_token: this.jwtService.sign(payload) };
   }
 
+  async logout(encryptedUUID: string): Promise<any> {
+    return await this.userTokenRepository.delete({ id: encryptedUUID });
+  }
+
   async getUserTokenById(encryptId: string) {
     return await this.userTokenRepository.findOne({
       where: { id: encryptId },

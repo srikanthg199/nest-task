@@ -17,12 +17,4 @@ import { databaseConfig } from './config/database.config';
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {
-  constructor(private configService: ConfigService) {
-    console.log(
-      /encvvv/,
-      'JWT_SECRET:',
-      this.configService.get<string>('JWT_EXPIRATION'),
-    ); // Debugging log
-  }
-}
+export class AppModule {}

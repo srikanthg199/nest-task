@@ -23,7 +23,6 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     const { password, ...user } = await this.userService.findUserById(
       payload.userId,
     );
-    console.log(/p/, payload);
     if (!user) {
       throw new UnauthorizedException();
     }
@@ -33,6 +32,6 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     if (!userToken) {
       throw new UnauthorizedException();
     }
-    return user;
+    return { ...user, encryptedUUID: payload.encryptedUUID };
   }
 }

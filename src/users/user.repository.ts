@@ -11,10 +11,10 @@ export class UserRepository {
     private readonly userRepository: Repository<User>,
   ) {}
 
-  async create(user: CreateUserDto): Promise<User> {
+  async createUser(user: CreateUserDto): Promise<User> {
     return this.userRepository.save(user);
   }
-  async findOne(filter: object): Promise<User | undefined> {
+  async getUser(filter: object): Promise<User | undefined> {
     return this.userRepository.findOne(filter);
   }
 
@@ -22,7 +22,11 @@ export class UserRepository {
     return this.userRepository.find();
   }
 
-  async update(id: string, user: UpdateUserRoleDto) {
+  async updateUser(id: string, user: UpdateUserRoleDto) {
     return this.userRepository.update(id, user);
+  }
+
+  async removeUser(user: User) {
+    return this.userRepository.remove(user);
   }
 }

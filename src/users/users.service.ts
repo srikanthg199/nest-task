@@ -19,28 +19,29 @@ export class UsersService {
       password: hashedPassword,
       role: role || UserRole.VIEWER, // Default role
     };
-    return await this.userRepository.create(userPayload);
+    return await this.userRepository.createUser(userPayload);
   }
   findAll() {
     return this.userRepository.findAllUsers();
   }
 
   findUserById(id: string) {
-    return this.userRepository.findOne({ where: { id } });
+    return this.userRepository.getUser({ where: { id } });
   }
 
   async update(id: string, updateUserDto: UpdateUserRoleDto) {
-    const res = await this.userRepository.update(id, updateUserDto);
+    const res = await this.userRepository.updateUser(id, updateUserDto);
     if (res) {
       return this.findUserById(id);
     }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  async remove(id: string) {
+    const user = await this.findUserById(id);
+    return this.userRepository.removeUser(user);
   }
 
   async findUserByEmail(email: string): Promise<User | undefined> {
-    return this.userRepository.findOne({ where: { email } });
+    return this.userRepository.getUser({ where: { email } });
   }
 }

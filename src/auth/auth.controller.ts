@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Post,
   Req,
@@ -14,7 +15,7 @@ import { User } from 'src/users/user.entity';
 import { CreateUserDto, LoginDto } from 'src/users/dto/user.dto';
 
 export interface RequestWithUser extends Request {
-  user: User;
+  user: User & { encryptedUUID: string };
 }
 
 @Controller('auth')
@@ -34,9 +35,16 @@ export class AuthController {
     return this.authService.login(user);
   }
 
+  @Delete('logout')
+  @UseGuards(JwtAuthGuard)
+  async logout(@Req() req: RequestWithUser) {
+    await this.authService.logout(req.user.encryptedUUID);
+    return { message: 'Logged out successfully' };
+  }
+
   @Get('profile')
   @UseGuards(JwtAuthGuard)
-  getProfile(@Req() req: RequestWithUser) {
+  getProfile(@Req() req: Request) {
     return req.user;
   }
 }
