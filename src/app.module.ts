@@ -7,6 +7,7 @@ import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { databaseConfig } from './config/database.config';
 import { DocumentsModule } from './documents/documents.module';
+import { IngestionModule } from './ingestion/ingestion.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { DocumentsModule } from './documents/documents.module';
     AuthModule,
     UsersModule,
     DocumentsModule,
+    IngestionModule,
   ],
   controllers: [AppController],
   providers: [AppService],

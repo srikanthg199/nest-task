@@ -32,7 +32,6 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     if (!userToken) {
       throw new UnauthorizedException();
     }
-    console.log(/Authuu/, user);
     return { ...user, encryptedUUID: payload.encryptedUUID };
   }
 }

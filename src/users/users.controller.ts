@@ -7,9 +7,10 @@ import {
   Delete,
   UseGuards,
   Req,
+  InternalServerErrorException,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { CreateUserDto, UpdateUserRoleDto } from './dto/user.dto';
+import { UpdateUserRoleDto } from './dto/user.dto';
 import { Roles } from 'src/auth/decorators/roles.decorator';
 import { RolesGuard } from 'src/auth/guards/roles.guard';
 import { UserRole } from 'src/constants';
@@ -24,31 +25,80 @@ export class UsersController {
   @Get()
   @UseGuards(RolesGuard)
   @Roles(UserRole.ADMIN, UserRole.EDITOR, UserRole.VIEWER)
-  findAll(@Req() req: RequestWithUser) {
-    console.log(/re/, req.user);
-
-    return this.usersService.findAll();
+  async findAll(@Req() req: RequestWithUser) {
+    try {
+      const users = await this.usersService.findAll();
+      return {
+        status: true,
+        message: 'Users retrieved successfully',
+        data: users,
+      };
+    } catch (error) {
+      throw new InternalServerErrorException({
+        status: false,
+        message: 'Failed to retrieve users',
+        error: error.message || null,
+      });
+    }
   }
 
   @Get(':id')
   @UseGuards(RolesGuard)
   @Roles(UserRole.ADMIN, UserRole.EDITOR, UserRole.VIEWER)
   async findOne(@Param('id') id: string) {
-    const { password, ...rest } = await this.usersService.findUserById(id);
-    return rest;
+    try {
+      const user = await this.usersService.findUserById(id);
+      const { password, ...rest } = user;
+      return {
+        status: true,
+        message: 'User retrieved successfully',
+        data: rest,
+      };
+    } catch (error) {
+      throw new InternalServerErrorException({
+        status: false,
+        message: 'Failed to retrieve user',
+        error: error.message || null,
+      });
+    }
   }
 
   @Patch(':id')
   @UseGuards(RolesGuard)
   @Roles(UserRole.ADMIN)
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserRoleDto) {
-    return this.usersService.update(id, updateUserDto);
+  async update(
+    @Param('id') id: string,
+    @Body() updateUserDto: UpdateUserRoleDto,
+  ) {
+    try {
+      const updatedUser = await this.usersService.update(id, updateUserDto);
+      return {
+        status: true,
+        message: 'User updated successfully',
+        data: updatedUser,
+      };
+    } catch (error) {
+      throw new InternalServerErrorException({
+        status: false,
+        message: 'Failed to update user',
+        error: error.message || null,
+      });
+    }
   }
 
   @Delete(':id')
   @UseGuards(RolesGuard)
   @Roles(UserRole.ADMIN, UserRole.EDITOR)
-  remove(@Param('id') id: string) {
-    return this.usersService.remove(id);
+  async remove(@Param('id') id: string) {
+    try {
+      await this.usersService.remove(id);
+      return { status: true, message: 'User deleted successfully', data: null };
+    } catch (error) {
+      throw new InternalServerErrorException({
+        status: false,
+        message: 'Failed to delete user',
+        error: error.message || null,
+      });
+    }
   }
 }
