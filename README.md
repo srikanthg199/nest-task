@@ -134,6 +134,7 @@ This project is a backend service built with **NestJS** to handle **user authent
 | -------------------- | ---------- | ------------------------- | --------------------- |
 | `/auth/register`     | `POST`     | Register a new user       | Public                |
 | `/auth/login`        | `POST`     | Login and receive JWT     | Public                |
+| `/auth/logout`       | `POST`     | Login and receive JWT     | Public                |
 | `/users`             | `GET`      | Get all users             | Admin, Editor, Viewer |
 | `/users/:id`         | `GET`      | Get a single user         | Admin, Editor, Viewer |
 | `/users/:id`         | `PATCH`    | Update user role          | Admin                 |
