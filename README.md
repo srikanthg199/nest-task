@@ -58,43 +58,100 @@ $ npm run test:e2e
 $ npm run test:cov
 ```
 
-## Deployment
+# **NestJS Backend for User & Document Management**
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+## **Overview**
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+This project is a backend service built with **NestJS** to handle **user authentication, document management, and ingestion controls**. It includes APIs for user role management, document CRUD operations, and integration with a Python backend for ingestion processing.
 
-```bash
-$ npm install -g mau
-$ mau deploy
-```
+## **Features**
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+### **Authentication & Authorization**
 
-## Resources
+- User registration, login, and logout.
+- Role-based access control (**Admin, Editor, Viewer**).
 
-Check out a few resources that may come in handy when working with NestJS:
+### **User Management**
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+- Admin-only APIs to manage user roles and permissions.
+- Secure access to user data.
 
-## Support
+### **Document Management**
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+- CRUD operations for documents.
+- Ability to upload and manage documents.
 
-## Stay in touch
+### **Ingestion Management**
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+- **Trigger ingestion process** via an API call to a Python backend.
+- Track and manage ongoing ingestion tasks.
 
-## License
+## **Technology Stack**
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
-# nest-task
+- **NestJS** (Backend framework)
+- **TypeScript** (For type safety)
+- **PostgreSQL** (Recommended database)
+- **JWT Authentication** (For secure user access)
+- **Microservices Architecture** (Interaction with Python backend)
+
+## **Installation & Setup**
+
+1. **Clone the repository**
+
+   ```sh
+   git clone https://github.com/srikanthg199/nest-task
+   cd nestjs-backend
+   ```
+
+2. **Install dependencies**
+
+   ```sh
+   npm install
+   ```
+
+3. **Configure environment variables** (`.env`)
+
+   ```sh
+   DB_HOST=db_host
+   DB_PORT=db_port
+   DB_USER=db_user
+   DB_PASSWORD=db_password
+   DB_NAME=db_name
+   JWT_SECRET=your_secret_key
+   PYTHON_BACKEND_URL=http://localhost:5000
+   ```
+
+4. **Run the application**
+   ```sh
+   npm run start:dev
+   ```
+   - For development: `npm run start:dev`
+   - For production: `npm run start:prod`
+
+## **API Endpoints**
+
+| **Endpoint**         | **Method** | **Description**           | **Access**            |
+| -------------------- | ---------- | ------------------------- | --------------------- |
+| `/auth/register`     | `POST`     | Register a new user       | Public                |
+| `/auth/login`        | `POST`     | Login and receive JWT     | Public                |
+| `/users`             | `GET`      | Get all users             | Admin, Editor, Viewer |
+| `/users/:id`         | `GET`      | Get a single user         | Admin, Editor, Viewer |
+| `/users/:id`         | `PATCH`    | Update user role          | Admin                 |
+| `/users/:id`         | `DELETE`   | Delete a user             | Admin, Editor         |
+| `/documents`         | `POST`     | Upload a document         | Admin, Editor         |
+| `/documents/:id`     | `GET`      | Get document details      | All Roles             |
+| `/documents/:id`     | `DELETE`   | Delete a document         | Admin, Editor         |
+| `/ingestion/trigger` | `POST`     | Trigger ingestion process | Admin, Editor         |
+| `/ingestion/:id`     | `GET`      | Get ingestion status      | Admin, Editor, Viewer |
+
+## **Contributing**
+
+- Fork the repository.
+- Create a feature branch (`git checkout -b feature-name`).
+- Commit your changes (`git commit -m "Added feature"`).
+- Push to your branch (`git push origin feature-name`).
+- Submit a pull request.
+
+## **License**
+
+This project is licensed under the **MIT License**.
