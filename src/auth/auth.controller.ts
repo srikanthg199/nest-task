@@ -13,11 +13,7 @@ import { JwtAuthGuard } from './guards/jwt.guard';
 import { Request } from 'express';
 import { User } from 'src/users/user.entity';
 import { CreateUserDto, LoginDto } from 'src/users/dto/user.dto';
-
-export interface RequestWithUser extends Request {
-  user: User & { encryptedUUID: string };
-}
-
+import { RequestWithUser } from 'src/interfaces';
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
@@ -44,7 +40,9 @@ export class AuthController {
 
   @Get('profile')
   @UseGuards(JwtAuthGuard)
-  getProfile(@Req() req: Request) {
+  getProfile(@Req() req: RequestWithUser) {
+    console.log(/rr/, req.user);
+
     return req.user;
   }
 }

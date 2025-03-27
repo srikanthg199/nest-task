@@ -1,5 +1,6 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 import { UserRole } from 'src/constants';
+import { Document } from 'src/documents/document.entity';
 
 @Entity()
 export class User {
@@ -35,4 +36,9 @@ export class User {
     default: null,
   })
   deleted_at: Date;
+
+  @OneToMany(() => Document, (document) => document.uploaded_by, {
+    cascade: true,
+  })
+  documents: Document[];
 }
